@@ -11,7 +11,16 @@ t : play with the Terminal""")
 
 # changed comment here
 if __name__ == "__main__":
-    t = Terminal()
-    t.run()
+    if len(argv) != 2:
+        usage()
+    elif argv[1] == "t":
+        ui = Terminal()
+    elif argv[1] == "g":
+        ui = Gui()
+    else:
+        usage()
+
+    #Polymorphism being used here
+    ui.run()
 
 
