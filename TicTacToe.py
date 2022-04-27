@@ -8,7 +8,10 @@ g : play with the GUI
 t : play with the Terminal""")
     quit()
 
+
+# changed comment here
 if __name__ == "__main__":
     t = Terminal()
     t.run()
+
 
