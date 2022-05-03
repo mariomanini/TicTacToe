@@ -24,6 +24,11 @@ class Game:
         result += f"\n\n{self.__player} turn to play"
         return result
 
+    def at(self,row,col):
+        row -= 1 #change to zero-based
+        col -= 1
+        return self.__board[row][col]
+
     def play(self,row,col):
         row -= 1 #change to zero-based
         col -= 1
