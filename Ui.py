@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from Game import Game, GameError
-from tkinter import Tk, Frame, Button, X, Toplevel, StringVar
+from tkinter import Tk, Frame, Button, X, Toplevel, StringVar, Scrollbar, Text, LEFT, RIGHT, Y, Grid, N, S, E, W
 from itertools import product
 
 class Ui(ABC):
@@ -34,6 +34,14 @@ class Gui(Ui):
             text = "Quit",
             command = self.__quit
         ).pack(fill = X)        
+
+        scroll = Scrollbar(frame)
+        console = Text(frame, height=4, width=50)
+        scroll.pack(side=RIGHT, fill=Y)
+        console.pack(side=LEFT, fill=Y)
+
+        scroll.config(command=console.yview)
+        console.config(yscrollcommand=scroll.set)
          
         self.__root = root
 
@@ -48,23 +56,34 @@ class Gui(Ui):
         frame = Frame(game_win)
         frame.grid(row=0,column=0)
 
+        Grid.columnconfigure(game_win, 0, weight=1)
+        Grid.rowconfigure(game_win, 0, weight=1)
+        frame.grid(row=0,column=0,sticky=N+S+E+W)
+
         self.__buttons = [[None for _ in range(3)] for _ in range (3)]
         for row,col in product(range(3),range(3)):
             b = StringVar()
             b.set(self.__game.at(row+1,col+1))
             self.__buttons[row][col] = b
 
-            cmd = lambda r=row, c=col: self.__play(r,c)
+            cmd = lambda r=row, c=col: self.__play(r,c) #anonymous function with default arguments
             Button(
                 frame,
                 textvariable = b,
                 command = cmd
-            ).grid(row=row,column=col)
+            ).grid(row=row,column=col,sticky = N+S+W+E)
+
+        for i in range(3):
+            Grid.rowconfigure(frame, i, weight=1)
+            Grid.columnconfigure(frame, i, weight=1)
 
         Button(game_win, text = "Dismiss", command=game_win.destroy).grid(row=1,column=0)
 
+
+
     def __play(self,r,c):
         self.__game.play(r+1,c+1)
+        #for row,col in product(range(3), range(3)):
         self.__buttons[r][c].set(self.__game.at(r+1,c+1))
 
 
